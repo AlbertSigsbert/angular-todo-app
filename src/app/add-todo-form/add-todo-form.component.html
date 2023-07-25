@@ -1,5 +1,5 @@
-<form class="flex space-x-8 font-montserrat">
-    <input type="text"
+<form  (ngSubmit)="handleSubmit()" class="flex space-x-8 font-montserrat">
+    <input type="text" [(ngModel)]="todoDetails" name="todoDetails"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full h-12 p-2.5"
         placeholder="add details" required>
 
