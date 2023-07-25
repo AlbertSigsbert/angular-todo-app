@@ -2,9 +2,9 @@
 
     <li *ngFor="let todo of todos">
         <div class="flex items-center pl-3">
-            <input type="checkbox" [ngModel]="todo.completed" (ngModelChange)="onTodoCompletedChange(todo, $event)"
+            <input type="checkbox" [ngModel]="todo.completed"(ngModelChange)="onTodoCompletedChange(todo, $event)"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
-            <label [for]="todo.description" class="py-3 ml-2 text-sm font-medium text-gray-900">{{ todo.description}}</label>
+            <label [for]="todo.description"  [ngClass]="{'line-through':todo.completed}"  class="py-3 ml-2 text-sm font-medium text-gray-900">{{ todo.description}}</label>
         </div>
     </li>
 

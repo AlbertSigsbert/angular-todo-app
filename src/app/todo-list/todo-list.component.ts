@@ -33,8 +33,6 @@ export class TodoListComponent {
         }
       );
     }
-
-
     ngOnDestroy() {
       this.todosChangedSubscription?.unsubscribe();
     }
