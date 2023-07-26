@@ -11,16 +11,23 @@ export class TodoListComponent {
      todos:Todo[] = [];
 
      private todosChangedSubscription: Subscription | undefined;
+     private activeTabSubscription: Subscription | undefined; 
 
      constructor(private todosService:TodoService){
-       this.todos = this.todosService.getTodos();
+       this.todos = this.todosService.getFilteredTodos();
      }
 
      ngOnInit() {
-      this.todos = this.todosService.getTodos();
+      this.todos = this.todosService.getFilteredTodos();
       this.todosChangedSubscription = this.todosService.todosChanged.subscribe(
         (updatedTodos: Todo[]) => {
           this.todos = updatedTodos;
+        }
+      );
+
+      this.activeTabSubscription = this.todosService.activeTabChanged.subscribe(
+        (activeTab: string) => {
+          this.todos = this.todosService.getFilteredTodos();
         }
       );
     }
@@ -35,6 +42,7 @@ export class TodoListComponent {
     }
     ngOnDestroy() {
       this.todosChangedSubscription?.unsubscribe();
+      this.activeTabSubscription?.unsubscribe();
     }
     
 
