@@ -8,10 +8,9 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class TodoService {
   private todos: Todo[] = [];
-  activeTab:'all' | 'active'|'completed' = 'all';
+  activeTab: 'all' | 'active' | 'completed' = 'all';
   todosChanged = new Subject<Todo[]>();
   activeTabChanged = new Subject<string>();
-
 
   constructor() {
     const storedTodos = localStorage.getItem('todos');
@@ -36,7 +35,7 @@ export class TodoService {
     this.todosChanged.next(this.todos.slice());
   }
 
-  updateTodo(todo:Todo, completed:boolean){
+  updateTodo(todo: Todo, completed: boolean) {
     const foundTodo = this.todos.find((t) => t.id === todo.id);
     if (foundTodo) {
       foundTodo.completed = completed;
@@ -45,21 +44,39 @@ export class TodoService {
     }
   }
 
-  setActiveTab(tab:'all' | 'active' | 'completed'){
-     this.activeTab = tab;
-     this.activeTabChanged.next(tab);
+  deleteTodo(todo: Todo) {
+    const foundTodo = this.todos.find((t) => t.id === todo.id);
+    if (foundTodo) {
+      const index = this.todos.indexOf(foundTodo);
+      if (index !== -1) {
+        this.todos.splice(index, 1);
+        localStorage.setItem('todos', JSON.stringify(this.todos));
+        this.todosChanged.next(this.todos.slice());
+      }
+    }
   }
 
-  getFilteredTodos(){
-    switch(this.activeTab){
+  deleteTodos() {
+    this.todos = this.todos.filter((todo) => !todo.completed);
+    localStorage.setItem('todos', JSON.stringify(this.todos));
+    this.todosChanged.next(this.todos.slice());
+  }
+
+  setActiveTab(tab: 'all' | 'active' | 'completed') {
+    this.activeTab = tab;
+    this.activeTabChanged.next(tab);
+  }
+
+  getFilteredTodos() {
+    switch (this.activeTab) {
       case 'all':
-        return this.todos.slice()
+        return this.todos.slice();
       case 'active':
-         return this.todos.filter(t => !t.completed)
+        return this.todos.filter((t) => !t.completed);
       case 'completed':
-         return this.todos.filter(t => t.completed)
-      default: 
-          return this.todos.slice()
+        return this.todos.filter((t) => t.completed);
+      default:
+        return this.todos.slice();
     }
   }
 }

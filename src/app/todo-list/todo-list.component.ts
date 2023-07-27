@@ -9,6 +9,7 @@ import { TodoService } from '../todo.service';
 })
 export class TodoListComponent {
      todos:Todo[] = [];
+     activeTab: string = '';
 
      private todosChangedSubscription: Subscription | undefined;
      private activeTabSubscription: Subscription | undefined; 
@@ -28,6 +29,7 @@ export class TodoListComponent {
       this.activeTabSubscription = this.todosService.activeTabChanged.subscribe(
         (activeTab: string) => {
           this.todos = this.todosService.getFilteredTodos();
+          this.activeTab = activeTab
         }
       );
     }
@@ -36,10 +38,30 @@ export class TodoListComponent {
       this.todosService.updateTodo(todo, completed);
       this.todosChangedSubscription = this.todosService.todosChanged.subscribe(
         (updatedTodos: Todo[]) => {
-          this.todos = updatedTodos;
+          this.todos = this.todosService.getFilteredTodos();
         }
       );
     }
+
+    onDelete(todo:Todo){
+      this.todosService.deleteTodo(todo);
+      this.todosChangedSubscription = this.todosService.todosChanged.subscribe(
+        (updatedTodos: Todo[]) => {
+          this.todos = this.todosService.getFilteredTodos();
+        }
+      );
+    }
+
+    onDeleteAll(){
+      this.todosService.deleteTodos();
+      this.todosChangedSubscription = this.todosService.todosChanged.subscribe(
+        (updatedTodos: Todo[]) => {
+          this.todos = this.todosService.getFilteredTodos();
+        }
+      );
+
+    }
+
     ngOnDestroy() {
       this.todosChangedSubscription?.unsubscribe();
       this.activeTabSubscription?.unsubscribe();

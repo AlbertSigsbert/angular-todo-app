@@ -1,13 +1,29 @@
-<ul class="my-8" *ngIf="todos.length">
+<ul class="my-8 w-full" *ngIf="todos.length">
 
-    <li *ngFor="let todo of todos">
+    <li class="flex items-center justify-between" *ngFor="let todo of todos">
         <div class="flex items-center pl-3">
-            <input type="checkbox" [ngModel]="todo.completed"(ngModelChange)="onTodoCompletedChange(todo, $event)"
+            <input type="checkbox" [ngModel]="todo.completed" (ngModelChange)="onTodoCompletedChange(todo, $event)"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
-            <label [for]="todo.description"  [ngClass]="{'line-through':todo.completed}"  class="py-3 ml-2 text-sm font-medium text-gray-900">{{ todo.description}}</label>
+            <label [for]="todo.description" [ngClass]="{'line-through':todo.completed}"
+                class="py-3 ml-2 text-sm font-medium text-gray-900">{{ todo.description}}</label>
         </div>
+
+        <a class="hover:cursor-pointer" *ngIf="activeTab === 'completed' && todo.completed" (click)="onDelete(todo)">
+            <img src="assets/trash.svg" alt="trash-icon">
+        </a>
     </li>
+
+    <div class="my-4 flex justify-end" *ngIf="activeTab === 'completed'">
+        <button
+             (click)="onDeleteAll()"
+            class="flex space-x-2 items-center py-2.5 px-5 text-sm font-montserrat font-medium text-gray-100 focus:outline-none bg-red-600 rounded-lg border">
+            <span><img src="assets/trash.svg" class="w-4 text-gray-100" alt="trash-icon"></span>
+            <span>delete all</span>
+        </button>
+    </div>
+
+
 
 </ul>
 
-<p class="font-montserrat my-4 text-2xl" *ngIf="!todos.length">There are no todos!</p>
+<!-- <p class="font-montserrat my-4 text-2xl" *ngIf="!todos.length">There are no todos!</p> -->
